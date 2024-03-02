@@ -10,7 +10,6 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public Text ScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -18,10 +17,22 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
+
+
+    // Textos de score
+    public Text ScoreText;
+    public Text ScoreTextF;
+    [SerializeField]private int puntajeMaximo;
+    public Text NombreJ; 
+
     
     // Start is called before the first frame update
     void Start()
     {
+        //puntaje maximo
+        puntajeMaximo = 0;
+
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -37,6 +48,10 @@ public class MainManager : MonoBehaviour
             }
         }
     }
+
+    void Awake(){
+         // tiene algo el load MainManagerMenu.Instance.LoadText(); 
+        }
 
     private void Update()
     {
@@ -57,7 +72,9 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                MainManagerMenu.Instance.SaveText(); 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                
             }
         }
     }
@@ -66,6 +83,13 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+
+       
+
+        if (m_Points>puntajeMaximo) {
+            puntajeMaximo = m_Points;
+            }
+        ScoreTextF.text = $"Best Score : {NombreJ.text} : {m_Points}";   
     }
 
     public void GameOver()
@@ -73,4 +97,16 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+public void Volver()
+{
+    SceneManager.LoadScene(0);
 }
+
+
+ public void NewTextSelected(Text t){
+        MainManagerMenu.Instance.textoDeNota = t;
+    }
+   
+}
+
